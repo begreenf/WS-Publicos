@@ -21,28 +21,56 @@
         });
 }
 
-function getInflationIndex() {
+async function getInflationIndex() {
     const period = document.getElementById('period').value;
-    const inflationIndex = 3.5;
-    document.getElementById('inflation-index-result').innerText = `El índice de inflación para el período ${period} es ${inflationIndex}%`;
+    const response = await fetch(`/api/IndiceInflacion/${period}`);
+
+    if (response.ok) {
+        const data = await response.json();
+        document.getElementById('inflation-index-result').innerText = `En el período ${data.periodo}, el índice de inflación fue de ${data.inflacion}%`;
+    } else {
+        document.getElementById('inflation-index-result').innerText = `No se encontró índice de inflación para el período ${period}`;
+    }
 }
 
-function getFinancialHealth() {
-    const financialHealthRNC = document.getElementById('financialHealthID')
-    const isHealthy = 'Yes'
-    const comment = "Comentario salud financiera placeholder"
-    const totalAmount = 5000
 
-    document.getElementById('financial-health-result').innerText = `Es saludable: ${isHealthy}\n Comentario: ${comment}\n Monto Total: ${totalAmount}`
+async function getFinancialHealth() {
+    const financialHealthRNC = document.getElementById('financialHealthID').value;
 
+    try {
+        const response = await fetch(`/api/SaludFinanciera/${financialHealthRNC}`);
+        if (!response.ok) {
+            throw new Error('No se encontró la salud financiera para el cliente proporcionado.');
+        }
+
+        const data = await response.json();
+        document.getElementById('financial-health-result').innerText =
+            `Es saludable: ${data.indicador}\nComentario: ${data.comentario}\nMonto Total: ${data.montoTotalAdeudado}`;
+    } catch (error) {
+        document.getElementById('financial-health-result').innerText = error.message;
+    }
 }
+
+
 
 function getCreditHistory() {
-    const creditHistoryRNC = document.getElementById('creditHistoryID');
-    const receiverRNC = 123456789;
-    const debtConcept = "Concepto deuda placeholder";
-    const debtDate = "01/09/2001";
-    const totalAmount = 1999.99;
+    const creditHistoryRNC = document.getElementById('creditHistoryID').value;
 
-    document.getElementById('credit-history-result').innerText = `RNC Adeudado: ${receiverRNC}\n Concepto Deuda: ${debtConcept}\n Fecha: ${debtDate}\n Monto Total: ${totalAmount}`;
+    fetch(`/api/HistorialCrediticio/${creditHistoryRNC}`)
+        .then(response => response.json())
+        .then(data => {
+            let resultText = '';
+            if (data.length > 0) {
+                data.forEach(item => {
+                    resultText += `RNC: ${item.companyRNC}\nConcepto Deuda: ${item.conceptoDeuda}\nFecha Deuda: ${item.fechaDeuda}\nMonto Total: ${item.montoTotalAdeudado}\n\n`;
+                });
+            } else {
+                resultText = 'No se encontró historial crediticio.';
+            }
+            document.getElementById('credit-history-result').innerText = resultText;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('credit-history-result').innerText = 'Ocurrió un error al consultar el historial crediticio.';
+        });
 }
