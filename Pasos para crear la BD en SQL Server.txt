@@ -1,0 +1,9 @@
+en appsettings.json cambian Server por el nombre de su servidor y Database por WSPublicos que es el nombre de la base de datos que lo hice
+
+- "DefaultConnection": "Server=myServerAddress;Database=myDataBase;Trusted_Connection=True;"
+
+Le dan donde dice Table, crear table y ahi ponen id | CurrencyCode | exchangeRate
+
+Y llaman a la DB ExchangeRates 
+
+Luego le dan click derecho a la dbo.ExchangeRates y le dan edit top 200 rows, ahi ya introducen el dolar y el eur con sus respectivos valores
