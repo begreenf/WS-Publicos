@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Final WS Públicos</title>
+    <link rel="stylesheet" href="~/css/site.css">
+</head>
+<body>
+    <h1>Servicios Web</h1>
+    <div id="exchange-rate">
+        <h2>Consultar Tasa de Cambio</h2>
+        <input type="text" id="currency-code" placeholder="Código de Moneda (PES, DOL, EUR)">
+        <button onclick="getExchangeRate()">Consultar</button>
+        <p id="exchange-rate-result"></p>
+        <p id="meaning"></p>
+    </div>
+
+    <div id="inflation-index">
+        <h2>Consultar Índice de Inflación</h2>
+        <input type="text" id="period" placeholder="Período (yyyymm)">
+        <button onclick="getInflationIndex()">Consultar</button>
+        <p id="inflation-index-result"></p>
+    </div>
+
+    <div id="financial-health">
+        <h2>Consultar Salud Financiera</h2>
+        <input type="text" id="financialHealthID" placeholder="Cedula o RNC de Cliente">
+        <button onclick="getFinancialHealth()">Consultar</button>
+        <p id="financial-health-result"></p>
+    </div>
+
+    <div id="credit-history">
+        <h2>Consultar Historial Crediticio</h2>
+        <input type="text" id="creditHistoryID" placeholder="Cedula o RNC de Cliente">
+        <button onclick="getCreditHistory()">Consultar</button>
+        <p id="credit-history-result"></p>
+    </div>
+
+    <script src="~/js/site.js"></script>
+</body>
+</html>
