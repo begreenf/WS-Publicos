@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -11,7 +15,7 @@
     <div id="exchange-rate">
         <h2>Consultar Tasa de Cambio</h2>
         <input type="text" id="currency-code" placeholder="Código de Moneda (PES, DOL, EUR)">
-        <button onclick="getExchangeRate()">Consultar</button>
+        <button onclick="logQuery('exchange-rate'); getExchangeRate();">Consultar</button>
         <p id="exchange-rate-result"></p>
         <p id="meaning"></p>
     </div>
@@ -19,24 +23,56 @@
     <div id="inflation-index">
         <h2>Consultar Índice de Inflación</h2>
         <input type="text" id="period" placeholder="Período (yyyymm)">
-        <button onclick="getInflationIndex()">Consultar</button>
+        <button onclick="logQuery('inflation-index'); getInflationIndex();">Consultar</button>
         <p id="inflation-index-result"></p>
     </div>
 
     <div id="financial-health">
         <h2>Consultar Salud Financiera</h2>
         <input type="text" id="financialHealthID" placeholder="Cedula o RNC de Cliente">
-        <button onclick="getFinancialHealth()">Consultar</button>
+        <button onclick="logQuery('financial-health'); getFinancialHealth();">Consultar</button>
         <p id="financial-health-result"></p>
     </div>
 
     <div id="credit-history">
         <h2>Consultar Historial Crediticio</h2>
         <input type="text" id="creditHistoryID" placeholder="Cedula o RNC de Cliente">
-        <button onclick="getCreditHistory()">Consultar</button>
+        <button onclick="logQuery('credit-history'); getCreditHistory();">Consultar</button>
         <p id="credit-history-result"></p>
     </div>
 
-    <script src="~/js/site.js"></script>
+    <div class="container">
+        <h2><a href="/Dashboard/Index">Ver Dashboard</a></h2>
+    </div>
+
+    <script>
+        function logQuery(queryType) {
+            fetch('/Dashboard/LogQuery', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(queryType)
+            }).catch(function (error) {
+                console.error('Error:', error);
+            });
+        }
+
+        function getExchangeRate() {
+            logQuery('exchange-rate');
+        }
+
+        function getInflationIndex() {
+            logQuery('inflation-index');
+        }
+
+        function getFinancialHealth() {
+            logQuery('financial-health');
+        }
+
+        function getCreditHistory() {
+            logQuery('credit-history');
+        }
+    </script>
 </body>
 </html>
