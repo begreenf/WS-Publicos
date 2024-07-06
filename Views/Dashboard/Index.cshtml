@@ -57,14 +57,12 @@
                 }
             });
 
-            // Connect to SignalR hub
             var connection = new signalR.HubConnectionBuilder().withUrl("/auditHub").build();
 
             connection.on("ReceiveAuditData", function (labels, data) {
                 var parsedLabels = JSON.parse(labels);
                 var parsedData = JSON.parse(data);
 
-                // Update chart data
                 myChart.data.labels = parsedLabels;
                 myChart.data.datasets[0].data = parsedData;
                 myChart.update();

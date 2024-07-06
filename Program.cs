@@ -3,7 +3,6 @@ using MyWebApp.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Agregar servicios al contenedor
 builder.Services.AddControllersWithViews();
 builder.Services.AddCors(options =>
 {
@@ -12,14 +11,12 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddSingleton(new AuditLogService(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddSingleton(new QueryLogService(builder.Configuration.GetConnectionString("DefaultConnection"))); // Registrar el nuevo servicio
+builder.Services.AddSingleton(new QueryLogService(builder.Configuration.GetConnectionString("DefaultConnection"))); 
 
-// Agregar SignalR
 builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-// Configurar middleware de la aplicación
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -40,7 +37,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapControllers();
 
-// Mapear SignalR hub
 app.MapHub<AuditHub>("/auditHub");
 
 app.Run();
