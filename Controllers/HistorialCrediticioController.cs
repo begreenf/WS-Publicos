@@ -37,7 +37,7 @@ public class HistorialCrediticioController : ControllerBase
                     CompanyRNC = reader.GetString(1),
                     ConceptoDeuda = reader.GetString(2),
                     FechaDeuda = reader.GetString(3),
-                    MontoTotalAdeudado = reader.GetDouble(4) // Cambiado de GetFloat a GetDouble
+                    MontoTotalAdeudado = reader.GetDouble(4) 
                 };
                 historialList.Add(historial);
             }

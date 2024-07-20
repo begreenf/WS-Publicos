@@ -12,6 +12,16 @@
 </head>
 <body>
     <h1>Dashboard</h1>
+
+    <!-- Filtros de Fecha -->
+    <div>
+        <label for="startDate">Fecha de Inicio:</label>
+        <input type="date" id="startDate" name="startDate">
+        <label for="endDate">Fecha de Fin:</label>
+        <input type="date" id="endDate" name="endDate">
+        <button onclick="applyDateFilter()">Aplicar Filtro</button>
+    </div>
+
     <canvas id="selectLogChart" width="400" height="200"></canvas>
 
     <script>
@@ -57,12 +67,14 @@
                 }
             });
 
+            // Connect to SignalR hub
             var connection = new signalR.HubConnectionBuilder().withUrl("/auditHub").build();
 
             connection.on("ReceiveAuditData", function (labels, data) {
                 var parsedLabels = JSON.parse(labels);
                 var parsedData = JSON.parse(data);
 
+                // Update chart data
                 myChart.data.labels = parsedLabels;
                 myChart.data.datasets[0].data = parsedData;
                 myChart.update();
@@ -72,6 +84,32 @@
                 return console.error(err.toString());
             });
         });
+
+        function applyDateFilter() {
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+
+            fetch(`/Dashboard/FilterByDate?startDate=${startDate}&endDate=${endDate}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    var parsedLabels = data.labels;
+                    var parsedData = data.data;
+
+                    // Update chart data
+                    var myChart = Chart.getChart("selectLogChart");
+                    myChart.data.labels = parsedLabels;
+                    myChart.data.datasets[0].data = parsedData;
+                    myChart.update();
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        }
     </script>
 </body>
 </html>

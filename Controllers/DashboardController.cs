@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using MyWebApp.Hubs;
 using MyWebApp.Services;
 using Newtonsoft.Json;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,6 +42,16 @@ namespace MyWebApp.Controllers
             ViewBag.Data = queryCounts.Values.ToList();
 
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FilterByDate(DateTime startDate, DateTime endDate)
+        {
+            var queryCounts = await _queryLogService.GetQueryCountsByDateAsync(startDate, endDate);
+            var labels = queryCounts.Keys.ToList();
+            var data = queryCounts.Values.ToList();
+
+            return Json(new { labels, data });
         }
     }
 }
